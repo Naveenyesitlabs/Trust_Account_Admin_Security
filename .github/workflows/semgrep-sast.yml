@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   semgrep:
@@ -22,9 +22,6 @@ jobs:
       - name: Install Semgrep
         run: pip install semgrep
 
-      - name: Show Semgrep version
-        run: semgrep --version
-
       - name: Create reports folder
         run: mkdir -p reports/semgrep
 
@@ -34,14 +31,10 @@ jobs:
       - name: Run Semgrep SARIF report
         run: semgrep scan --config "p/default" . --sarif --output reports/semgrep/semgrep-sast-report.sarif || true
 
-      - name: Upload JSON artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-json-report
-          path: reports/semgrep/semgrep-sast-report.json
-
-      - name: Upload SARIF artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-sarif-report
-          path: reports/semgrep/semgrep-sast-report.sarif
+      - name: Commit reports to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/semgrep/semgrep-sast-report.json reports/semgrep/semgrep-sast-report.sarif
+          git diff --cached --quiet || git commit -m "Add Semgrep SAST reports"
+          git push
