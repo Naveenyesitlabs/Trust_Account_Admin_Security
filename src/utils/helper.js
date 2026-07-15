@@ -9,4 +9,5 @@ export const displayAccountNumber = (number) => {
   const last4 = str.slice(-4);
   const masked = 'x'.repeat(str.length - 4);
   return `${masked}${last4}`;
+
 };
