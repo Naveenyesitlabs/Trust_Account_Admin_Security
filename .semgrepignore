@@ -4,3 +4,4 @@ node_modules/
 public/js/jquery.js
 CLIENT_ADMIN_FRONTEND_SECURITY_VALIDATION_REPORT_FINAL_2026-07-08.md
 npm-audit-report.json
+public/js/bootstrap.min.js
